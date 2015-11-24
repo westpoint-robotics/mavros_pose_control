@@ -1,5 +1,5 @@
 # mavros_pose_control
-### Cascaded PID controller for setpoint position
+### Cascade PID controller for setpoint position
   1. Install package <code> mavros_pose_control </code> from <code> westpoint robotics </code> on github
   2. Launch mocap_optitrack to receive data from mocap.
   2. Launch the <code> px4.launch </code> from mavros package.
