@@ -1,0 +1,20 @@
+<launch>
+	<!-- vim: set ft=xml noet : -->
+	<!-- mavteleop example launch script -->
+
+	<!-- <include file="$(find mavros)/launch/px4.launch" /> -->
+
+	<node pkg="mavros_pose_control" name="mpc" type="mavros_pose_control_node" output="screen">
+	</node>
+
+	<node pkg="joy" type="joy_node" name="joy" required="True">
+		<param name="autorepeat_rate" value="5" /> <!-- Minimal update rate, Hz -->
+	</node>
+
+	<node pkg="mavros_pose_control" type="mavteleop" name="mavteleop" required="True">
+		<rosparam command="load" file="$(find mavros_pose_control)/launch/f710_joy.yaml" />
+	</node>
+
+	<node pkg="rqt_gui" type="rqt_gui" name="mpc_gui" args="--perspective-file $(find mavros_pose_control)/launch/mpc_rqt_gui.perspective">
+	</node>
+</launch>

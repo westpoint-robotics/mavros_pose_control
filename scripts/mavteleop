@@ -1,0 +1,195 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import sys
+import argparse
+import rospy
+import mavros
+
+from tf.transformations import quaternion_from_euler
+from sensor_msgs.msg import Joy
+from std_msgs.msg import Header, Float64, Empty
+from geometry_msgs.msg import Pose, PoseStamped, Twist, TwistStamped, Vector3, Quaternion, Point
+from mavros_msgs.msg import OverrideRCIn
+from mavros import command
+from mavros import setpoint as SP
+
+# Mode 2 on Logitech F710 gamepad
+axes_map = {
+    'roll': 3,
+    'pitch': 4,
+    'yaw': 0,
+    'throttle': 1
+}
+
+axes_scale = {
+    'roll': 1.0,
+    'pitch': 1.0,
+    'yaw': 1.0,
+    'throttle': 1.0
+}
+
+# XXX: todo
+button_map = {
+    'teleop_toggle' : 0,
+    'clear_integrals' : 1,
+    'set_takeoff_setpoint': 2,
+    'set_land_setpoint': 3,
+    'arm': 6,
+    'disarm': 7,
+    's1':8,
+    's2':9,
+    's3':10,
+    's4':11
+}
+
+def arm(args, state):
+    try:
+        ret = command.arming(value=state)
+    except rospy.ServiceException as ex:
+        fault(ex)
+
+    if not ret.success:
+        rospy.loginfo("Request failed.")
+    else:
+        rospy.loginfo("Request success.")
+
+
+def load_map(m, n):
+    for k, v in m.iteritems():
+        m[k] = rospy.get_param(n + k, v)
+
+
+def get_axis(j, n):
+    return j.axes[axes_map[n]] * axes_scale[n]
+
+def get_buttons(j, n):
+    return j.buttons[ button_map[n]]
+
+class teleopControl:
+    def __init__(self,args):
+        self.args = args
+        rospy.loginfo("MAV-Teleop: Attitude setpoint control type.")
+    
+        load_map(axes_map, '~axes_map/')
+        load_map(axes_scale, '~axes_scale/')
+        load_map(button_map, '~button_map/')
+    
+        self.att_pub = SP.get_pub_attitude_pose(queue_size=10)
+        self.thd_pub = SP.get_pub_attitude_throttle(queue_size=10)
+        self.ready_pub = rospy.Publisher( '/mpc/reset_integrals', Empty, queue_size=10 )
+        self.set_point_pub = rospy.Publisher( '/mpc/pose_setpoint', Pose, queue_size=10 )
+    
+        if rospy.get_param(mavros.get_topic("setpoint_attitude", "reverse_throttle"), False):
+            def thd_normalize(v):
+                return v
+        else:
+            def thd_normalize(v):
+                return arduino_map(v, -1.0, 1.0, 0.0, 1.0)
+    
+        self.teleop_enabled = True
+    
+    
+        jsub = rospy.Subscriber("joy", Joy, self.joy_cb)
+        throttle_sub = rospy.Subscriber("/mpc/pid/throttle", Float64, self.z_controller_cb)
+        att_sub = rospy.Subscriber("/mpc/pid/attitude", PoseStamped, self.xy_controller_cb)
+        self.cur_pose = Pose()
+        mocap_sub = rospy.Subscriber("/mavros/vision_pose/pose", PoseStamped, self.cur_pose_cb)
+        rospy.spin()
+
+    def cur_pose_cb(self,msg):
+        self.cur_pose = msg.pose
+
+    def xy_controller_cb(self,msg):
+        if self.teleop_enabled == False:
+            self.att_pub.publish(msg)
+    
+    def z_controller_cb(self,msg):
+        if self.teleop_enabled == False:
+            self.thd_pub.publish(msg)
+    
+    def joy_cb(self,joy):
+        # get axes normalized to -1.0..+1.0 RPY, 0.0..1.0 T
+        roll = get_axis(joy, 'roll')
+        pitch = get_axis(joy, 'pitch') + 0.022
+        yaw = get_axis(joy, 'yaw')
+        throttle = (get_axis(joy, 'throttle') + 1.0)/2.0
+    
+        rospy.logdebug("RPYT: %f, %f, %f, %f", roll, pitch, yaw, throttle)
+    
+        if (get_buttons(joy,'teleop_toggle') == 1):
+            self.teleop_enabled = False
+        else:
+            self.teleop_enabled = True
+    
+        if (get_buttons(joy,'clear_integrals') == 1):
+            self.ready_pub.publish(Empty())
+
+        if (get_buttons(joy,'set_land_setpoint') == 1):
+            t = self.cur_pose
+            t.position.z = 0.0
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy,'s1') == 1):
+            t = self.cur_pose
+            t.position.x = 0.5
+            t.position.y = -0.5
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy,'s2') == 1):
+            t = self.cur_pose
+            t.position.x = -0.5
+            t.position.y = -0.5
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy,'s3') == 1):
+            t = self.cur_pose
+            t.position.x = 0.5
+            t.position.y = 0.5
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy,'s4') == 1):
+            t = self.cur_pose
+            t.position.x = -0.5
+            t.position.y = 0.5
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy,'set_takeoff_setpoint') == 1):
+            t = self.cur_pose
+            t.position.z = 1.0
+            self.set_point_pub.publish( t )
+
+        if (get_buttons(joy, 'arm') == 1):
+            arm( self.args , True)
+
+        if (get_buttons(joy, 'disarm') == 1):
+            arm( self.args , False)
+
+
+        # TODO: Twist variation
+        pose = PoseStamped(header=Header(stamp=rospy.get_rostime()))
+        q = quaternion_from_euler(roll, pitch, yaw)
+        pose.pose.orientation = Quaternion(*q)
+    
+        if self.teleop_enabled:
+            self.att_pub.publish(pose)
+            self.thd_pub.publish(data=throttle)
+    
+
+def main():
+    parser = argparse.ArgumentParser(description="Teleoperation with toggle to alternate controller")
+    parser.add_argument('-n', '--mavros-ns', help="ROS node namespace", default="/mavros")
+    parser.add_argument('-v', '--verbose', action='store_true', help="verbose output")
+
+    args = parser.parse_args(rospy.myargv(argv=sys.argv)[1:])
+
+    rospy.init_node("mavteleop")
+    mavros.set_namespace(args.mavros_ns)
+
+    tc = teleopControl(args)
+
+
+if __name__ == '__main__':
+    main()
+
