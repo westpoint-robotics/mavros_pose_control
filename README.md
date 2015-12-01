@@ -14,7 +14,7 @@
 
 ### Steps for demo
   1. Arm the quad
-  2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the sample_config_values.cfg in this package to set up the gains manually.
+  2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the sample_config_values.cfg in this package to set up the gains manually. Custom values are the 3rd last parameter)
   3. Switch to offboard
   4. Control the quad using joystick 
   5. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
