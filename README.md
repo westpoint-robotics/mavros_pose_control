@@ -12,7 +12,7 @@
 
 ### Steps for demo
   1. Arm the quad
-  2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the image in this package to set up the gains manually.
+  2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the sample_config_values.cfg in this package to set up the gains manually.
   3. Switch to offboard
   4. Control the quad using joystick 
   5. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
@@ -22,7 +22,7 @@
 
 ### Additional commands
   1. See/change the gains for the controller using the following command
-    <p><code> rosrun rqt_reconfigure rqt_reconfigure </code></p> <b> or </b>
+    <p><code> rosrun rqt_reconfigure rqt_reconfigure </code></p><b>or</b>
   2. Manually change in the gains in the rqt perspective.
   
 
