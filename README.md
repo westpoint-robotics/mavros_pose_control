@@ -22,7 +22,9 @@
 
 ### Additional commands
   1. See/change the gains for the controller using the following command
-    <p><code> rosrun rqt_reconfigure rqt_reconfigure </code></p>
+    <p><code> rosrun rqt_reconfigure rqt_reconfigure </code></p> <b> or </b>
+  2. Manually change in the gains in the rqt perspective.
+  
 
 ### Controller Logic
   * will be posted soon *
