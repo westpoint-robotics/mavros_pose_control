@@ -1,3 +1,5 @@
+##** Read this document if you have used this package before 12/01/2015** **Details are changing continuously**
+-----------------------------------------------------------------------------------------------------------
 # mavros_pose_control
 ### Cascade PID controller for setpoint position
   1. Install package <code> mavros_pose_control </code> from <code> westpoint robotics </code> on github
@@ -23,7 +25,7 @@
 ### Additional commands
   1. See/change the gains for the controller using the following command
     <p><code> rosrun rqt_reconfigure rqt_reconfigure </code></p><b>or</b>
-  2. Manually change in the gains in the rqt perspective.
+  2. Manually change the gains in the rqt perspective.
   
 
 ### Controller Logic
