@@ -6,15 +6,18 @@
   3. Launch <code> teleop_controller_test.launch </code> from mavros_pose_control package.
   4. publish the setpoint target(pose message) on <code>/mav_pose_control/pose setpoint </code> i.e.<br>
      <code> rostopic pub /mav_pose_control/pose_setpoint geometry_msgs/Pose "position: x:0.1 y:0.2 z:0.9 orientation: x:0.0 y:0.0 z:0.0 w:0.0" </code>
+    or
+  4. Use one of the setpoints assigned to the joystick keys.(Refer table below)
 
 
 ### Steps for demo
   1. Arm the quad
-  2. Switch to offboard
-  3. Control the quad using joystick 
-  4. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
-  5. releasing the button will give control back to the joystick(offboard joystick mode).
-  6. Check the button map for several default setpoints.
+  2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the image in this package to set up the gains manually.
+  3. Switch to offboard
+  4. Control the quad using joystick 
+  5. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
+  6. releasing the button will give control back to the joystick(offboard joystick mode).
+  7. Check the button map for several default setpoints.
 
 
 ### Additional commands
@@ -25,8 +28,9 @@
   * will be posted soon *
 
 
-###Important Links 
+###Useful Links 
  1. http://stackoverflow.com/questions/20615962/2d-world-velocity-to-2d-local-velocity
+ 2. http://flitetest.com/articles/p-i-and-sometimes-d-gains-in-a-nutshell
 
 ###Button map
   Button map              |       Button Number       |Actual Joystick Key No   |         Description
