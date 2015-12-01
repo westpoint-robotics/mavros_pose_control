@@ -29,18 +29,18 @@
  1. http://stackoverflow.com/questions/20615962/2d-world-velocity-to-2d-local-velocity
 
 ###Button map
-  Button map              |       Button Number       |         Description
-  ------------------------|:-------------------------:|-----------------------------------------------------------
-  'teleop_toggle'         |       0                   |  Switches to position control mode
-  'clear_integrals'       |        1                  |Clear the intergrals before switching to position control( Good practice)
-  'set_takeoff_setpoint'  |       2                   |Take off to 1 meter from current location
-  'set_land_setpoint'     |       3                   |Land setpoint(just above the ground) from current position
-  'arm'                   |6                          |arming the quad
-  'disarm'                |   7                       | disarming the quad
-  's1'                    | 8                         |pre programmed setpoint( one of the corners of 1*1 square)
-  's2'                    | 9                         |pre programmed setpoint( one of the corners of 1*1 square)
-  's3'                    | 10                        |pre programmed setpoint( one of the corners of 1*1 square)
-  's4'                    | 11                        |pre programmed setpoint( one of the corners of 1*1 square)
+  Button map              |       Button Number       |Actual Joystick Key No   |         Description
+  ------------------------|:-------------------------:|:-----------------------:|----------------------------------
+  'teleop_toggle'         |       0                   | 1| Switches to position control mode
+  'clear_integrals'       |        1                  |2|Clear the intergrals before switching to position control( Good practice)
+  'set_takeoff_setpoint'  |       2                   |3|Take off to 1 meter from current location
+  'set_land_setpoint'     |       3                   |4|Land setpoint(just above the ground) from current position
+  'arm'                   |6                          |7|arming the quad
+  'disarm'                |   7                       |8|disarming the quad
+  's1'                    | 8                         |9|pre programmed setpoint( one of the corners of 1*1 square)
+  's2'                    | 9                         |10|pre programmed setpoint( one of the corners of 1*1 square)
+  's3'                    | 10                        |11|pre programmed setpoint( one of the corners of 1*1 square)
+  's4'                    | 11                        |12|pre programmed setpoint( one of the corners of 1*1 square)
 
 *Printed button numbers on the joystick starts with 1 and ends with 12 *  
 
