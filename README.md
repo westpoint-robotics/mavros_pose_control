@@ -17,9 +17,11 @@
   2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the sample_config_values.cfg in this package to set up the gains manually. Custom values are the 3rd last parameter)
   3. Switch to offboard
   4. Control the quad using joystick 
-  5. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
-  6. releasing the button will give control back to the joystick(offboard joystick mode).
-  7. Check the button map for several default setpoints.
+  5. Either publish a setpoint using command given above or use any of the pre programmed setpoints on the joystick.
+  6. Reset the integrals before switching to setpoint position mode
+  7. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
+  8. releasing the button will give control back to the joystick(offboard joystick mode).
+  9. Check the button map for several default setpoints.
 
 
 ### Additional commands
@@ -35,6 +37,7 @@
 ###Useful Links 
  1. http://stackoverflow.com/questions/20615962/2d-world-velocity-to-2d-local-velocity
  2. http://flitetest.com/articles/p-i-and-sometimes-d-gains-in-a-nutshell
+ 3. http://blog.oscarliang.net/quadcopter-pid-explained-tuning/
 
 ###Button map
   Button map              |       Button Number       |Actual Joystick Key No   |         Description
