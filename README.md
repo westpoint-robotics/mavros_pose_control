@@ -12,7 +12,7 @@
   4. Use one of the setpoints assigned to the joystick keys.(Refer table below)
 
 
-### Steps for demo
+### Steps for demo( pre flight checks mentioned below are highly recommended) 
   1. Arm the quad
   2. Check PID gain values in rqt perspective.(If it shows the default value then refer to the sample_config_values.cfg in this package to set up the gains manually. Custom values are the 3rd last parameter)
   3. Switch to offboard
@@ -23,6 +23,13 @@
   8. releasing the button will give control back to the joystick(offboard joystick mode).
   9. Check the button map for several default setpoints.
 
+### Pre flight Checks
+  1. Check for Mocap data if it is streamed without freezing
+   ( if the data freezes frequently then on the windows side change the setting of camera group and change the point cloud engine to version 4.0 and its better to uncheck 'broadcast frames' checkbox and check it again)
+  2. Before switching to offboard make sure the joystick throttle is minimum position
+  3. Check conditions of propellers on the quad and change if it looks damaged.
+  4. <b>Currently when you run the mavros_pose_control for the first time the gains are set to default. Change the gains and You don't have to modify this again until you close the current roscore session.</b>
+  5. Once you swtich to offboard joystick mode, slowly increase the throttle to check if quad is trying to point towards east direction. Once it does points towards east,it means quad is ready to take off. if it starts turning in opposite direction then there might be something wrong and do the pre flight checks.
 
 ### Additional commands
   1. See/change the gains for the controller using the following command
@@ -32,6 +39,7 @@
 
 ### Controller Logic
   * will be posted soon *
+  * for PID tuning techniques follow link 2 and 3 for reference.
 
 
 ###Useful Links 
