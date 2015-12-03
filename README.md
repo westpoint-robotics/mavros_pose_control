@@ -1,4 +1,4 @@
-##** Read this document if you have used this package before 12/01/2015** **Details are changing continuously**
+##** Read this document if you have used this package before 12/03/2015** **Details are changing continuously**
 -----------------------------------------------------------------------------------------------------------
 # mavros_pose_control
 ### Cascade PID controller for setpoint position
