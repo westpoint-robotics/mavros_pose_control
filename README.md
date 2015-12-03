@@ -22,6 +22,7 @@
   7. push and hold button 1 to go to the target setpoint and stay(setpoint position mode).
   8. releasing the button will give control back to the joystick(offboard joystick mode).
   9. Check the button map for several default setpoints.
+  10. <b>Absolutely </b> make sure that quad is <b> disarmed </b> before you close any of the nodes ( mavros or mavros_pose_control) as closing any of the nodes before you disarmed the vehicle will cause vehicle to take off without any control if quad is offboard mode.
 
 ### Pre flight Checks
   1. Check for Mocap data if it is streamed without freezing
